@@ -3,7 +3,7 @@
 	    _MainTex("Main tex",2D) = "black" {}
 		_GlowColor ("Glow Color", Color) = (1,0,0,1)
         _Outline ("Outline width", Range (0.0, 1.0)) = 0.225
-		_Opacity ("Glow Opacity", Range (0.5, 2.0)) = 1.0
+		_Opacity ("Glow Opacity", Range (0.5, 10.0)) = 1.0
 	    _RenderTex("Render tex",2D) = "black" {}
 		_AreaTex("Area tex",2D) = "black" {}
 		_Factor("Factor",Range (0.0, 1.0)) = 1.0
@@ -45,6 +45,9 @@
         o.pos = mul(UNITY_MATRIX_P,view_vertex);
 		o.color = fixed4(_GlowColor.r,_GlowColor.g,_GlowColor.b,  _Opacity / 10.0);
 
+		float3 delta = normalize(view_normal);
+		o.color.a *= 1 - (delta.x * delta.x + delta.y * delta.y);
+
 		return o;
 	}	
 	fixed4 fragPass(voutGlow i) : COLOR 
@@ -69,7 +72,7 @@
 			ENDCG
 		}
 		
-		Pass {
+		/*Pass {
 			Name "OUTLINE2" Tags { "LightMode" = "Always" "Queue" = "Transparent" }
 			Cull Off ZWrite Off Blend SrcAlpha OneMinusSrcAlpha 
 			CGPROGRAM			
@@ -79,7 +82,7 @@
 				return vertPassGlobal(v, 0.4);
 			}
 			ENDCG
-		}
+		}*/
 		
 		Pass {
 			Name "OUTLINE3" Tags { "LightMode" = "Always" "Queue" = "Transparent" }
@@ -93,7 +96,7 @@
 			ENDCG
 		}
 
-		Pass {
+		/*Pass {
 			Name "OUTLINE3" Tags { "LightMode" = "Always" "Queue" = "Transparent" }
 			Cull Off ZWrite Off Blend SrcAlpha OneMinusSrcAlpha 
 			CGPROGRAM			
@@ -103,7 +106,7 @@
 				return vertPassGlobal(v, 0.8);
 			}
 			ENDCG
-		}
+		}*/
 		
 		Pass {
 			Name "OUTLINE5" Tags { "LightMode" = "Always" "Queue" = "Transparent" }
